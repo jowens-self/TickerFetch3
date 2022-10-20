@@ -37,11 +37,11 @@ public class TickerFetch3Application {
 //                .onFailure(TickerFetch3Application::handleFailure)
 //                .fetch();
 //
-        AlphaVantage.api().timeSeries().intraday()
-                .forSymbol("SPY")
-                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
-                .onFailure(TickerFetch3Application::handleFailure)
-                .fetch();
+//        AlphaVantage.api().timeSeries().intraday()
+//                .forSymbol("SPY")
+//                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
+//                .onFailure(TickerFetch3Application::handleFailure)
+//                .fetch();
 
         /* cannot call TimeSeriesResponse as does not derive from
         the TimeSeries class, call quote version instead */
@@ -54,15 +54,20 @@ public class TickerFetch3Application {
 
     //public static void handleSuccess(QuoteResponse response) {
     public void handleSuccess(QuoteResponse response) {
-        Quote q = new Quote();
+        Quote q = new Quote(response.getSymbol(), response.getOpen(),
+                response.getHigh(), response.getLow(), response.getPrice(),
+                response.getVolume(), response.getLatestTradingDay(),
+                response.getPreviousClose(), response.getChange(),
+                response.getChangePercent());
+
         //plotGraph(response.getStockUnits());
-        System.out.println(QuoteResponse.QuoteParser.toJSON();
+        System.out.println(q.toString());
     }
 
     public static void handleSuccess(TimeSeriesResponse response) {
         //plotGraph(response.getStockUnits());
 
-        System.out.println(response.getStockUnits().);
+        System.out.println(response.getStockUnits());
     }
 
     public static void handleFailure(AlphaVantageException error) {
@@ -71,6 +76,22 @@ public class TickerFetch3Application {
 
 
     public static class Quote {
+        @Override
+        public String toString() {
+            return "Quote{" +
+                    "symbol='" + symbol + '\'' +
+                    ", open=" + open +
+                    ", high=" + high +
+                    ", low=" + low +
+                    ", price=" + price +
+                    ", volume=" + volume +
+                    ", latestTradingDay='" + latestTradingDay + '\'' +
+                    ", previousClose=" + previousClose +
+                    ", change=" + change +
+                    ", changePercent=" + changePercent +
+                    '}';
+        }
+
         private String symbol;
         private double open;
         private double high;
