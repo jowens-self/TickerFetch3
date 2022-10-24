@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 
-import jowens_software.tickerfetch3.CurrentQuote;
 @SpringBootApplication
 public class TickerFetch3Application {
 
@@ -30,27 +29,23 @@ public class TickerFetch3Application {
 
         AlphaVantage.api().init(cfg);
 
-        //Not seeing why this one doesn't work and intraday does with
-        //the object being returned to timeSeries
-//        AlphaVantage.api().timeSeries().quote()
-//                .forSymbol("SPY")
-//                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
-//                .onFailure(TickerFetch3Application::handleFailure)
-//                .fetch();
-//
-//        AlphaVantage.api().timeSeries().intraday()
-//                .forSymbol("SPY")
-//                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
-//                .onFailure(TickerFetch3Application::handleFailure)
-//                .fetch();
-
-        /* cannot call TimeSeriesResponse as does not derive from
-        the TimeSeries class, call quote version instead */
+        /* "Global Quote" Call by Ticker (Single Quote Return)
+        --- Do not call TimeSeriesResponse as does not derive from
+        the TimeSeries class, call QuoteResponse instead */
         AlphaVantage.api().timeSeries().quote()
                 .forSymbol("SPY")
                 .onSuccess(e -> handleSuccess((QuoteResponse) e))
                 .onFailure(TickerFetch3Application::handleFailure)
                 .fetch();
+
+
+        AlphaVantage.api().timeSeries().intraday()
+                .forSymbol("SPY")
+                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
+                .onFailure(TickerFetch3Application::handleFailure)
+                .fetch();
+
+
     }
 
     //public static void handleSuccess(QuoteResponse response) {
