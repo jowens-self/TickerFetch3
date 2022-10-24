@@ -38,14 +38,12 @@ public class TickerFetch3Application {
                 .onFailure(TickerFetch3Application::handleFailure)
                 .fetch();
 
-
-        AlphaVantage.api().timeSeries().intraday()
-                .forSymbol("SPY")
-                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
-                .onFailure(TickerFetch3Application::handleFailure)
-                .fetch();
-
-
+        //"intraday" generic call by ticker
+//        AlphaVantage.api().timeSeries().intraday()
+//                .forSymbol("SPY")
+//                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
+//                .onFailure(TickerFetch3Application::handleFailure)
+//                .fetch();
     }
 
     //public static void handleSuccess(QuoteResponse response) {
