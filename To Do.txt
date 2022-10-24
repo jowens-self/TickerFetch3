@@ -1,0 +1,2 @@
+Refactor to have class that takes ticker and
+instantiates CurrentQuote
