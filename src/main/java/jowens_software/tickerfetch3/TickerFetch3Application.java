@@ -48,7 +48,7 @@ public class TickerFetch3Application {
 
     //public static void handleSuccess(QuoteResponse response) {
     public void handleSuccess(QuoteResponse response) {
-        CurrentQuote q = new CurrentQuote(response.getSymbol(), response.getOpen(),
+        SingleQuote q = new SingleQuote(response.getSymbol(), response.getOpen(),
                 response.getHigh(), response.getLow(), response.getPrice(),
                 response.getVolume(), response.getLatestTradingDay(),
                 response.getPreviousClose(), response.getChange(),

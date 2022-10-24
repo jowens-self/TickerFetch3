@@ -3,5 +3,5 @@ package jowens_software.tickerfetch3;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public class TickerFetchRepository {
+interface SingleTickerFetchRepository extends JpaRepository <SingleQuote, String> {
 }

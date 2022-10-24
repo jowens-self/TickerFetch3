@@ -1,6 +1,6 @@
 package jowens_software.tickerfetch3;
 
-public class CurrentQuote {
+public class SingleQuote {
     @Override
     public String toString() {
         return "Quote{" +
@@ -28,7 +28,7 @@ public class CurrentQuote {
     private double change;
     private double changePercent;
 
-    public CurrentQuote(String symbol, double open, double high, double low, double price, double volume, String latestTradingDay, double previousClose, double change, double changePercent) {
+    public SingleQuote(String symbol, double open, double high, double low, double price, double volume, String latestTradingDay, double previousClose, double change, double changePercent) {
         this.symbol = symbol;
         this.open = open;
         this.high = high;
