@@ -1,21 +1,19 @@
 package jowens_software.tickerfetch3;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class SingleQuote {
-    @Override
-    public String toString() {
-        return "Quote{" +
-                "symbol='" + symbol + '\'' +
-                ", open=" + open +
-                ", high=" + high +
-                ", low=" + low +
-                ", price=" + price +
-                ", volume=" + volume +
-                ", latestTradingDay='" + latestTradingDay + '\'' +
-                ", previousClose=" + previousClose +
-                ", change=" + change +
-                ", changePercent=" + changePercent +
-                '}';
-    }
+
+//    private @Id
+//    @GeneratedValue Long id;
+
+    //private @Id String symbol;
+
+    private @Id @GeneratedValue Long id;
+
 
     private String symbol;
     private double open;
@@ -39,6 +37,25 @@ public class SingleQuote {
         this.previousClose = previousClose;
         this.change = change;
         this.changePercent = changePercent;
+    }
+
+    public SingleQuote() {
+    }
+
+    @Override
+    public String toString() {
+        return "Quote{" +
+                "symbol='" + symbol + '\'' +
+                ", open=" + open +
+                ", high=" + high +
+                ", low=" + low +
+                ", price=" + price +
+                ", volume=" + volume +
+                ", latestTradingDay='" + latestTradingDay + '\'' +
+                ", previousClose=" + previousClose +
+                ", change=" + change +
+                ", changePercent=" + changePercent +
+                '}';
     }
 
     public String getSymbol() {
