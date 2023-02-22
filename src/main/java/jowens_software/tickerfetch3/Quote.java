@@ -5,7 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class SingleQuote {
+public class Quote {
 
 //    private @Id
 //    @GeneratedValue Long id;
@@ -26,7 +26,7 @@ public class SingleQuote {
     private double change;
     private double changePercent;
 
-    public SingleQuote(String symbol, double open, double high, double low, double price, double volume, String latestTradingDay, double previousClose, double change, double changePercent) {
+    public Quote(String symbol, double open, double high, double low, double price, double volume, String latestTradingDay, double previousClose, double change, double changePercent) {
         this.symbol = symbol;
         this.open = open;
         this.high = high;
@@ -39,7 +39,7 @@ public class SingleQuote {
         this.changePercent = changePercent;
     }
 
-    public SingleQuote() {
+    public Quote() {
     }
 
     @Override

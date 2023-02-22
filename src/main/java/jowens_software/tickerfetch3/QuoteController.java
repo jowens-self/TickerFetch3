@@ -7,19 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.atomic.AtomicReference;
 
-//import com.crazzyghost.alphavantage.AlphaVantage;
-//import com.crazzyghost.alphavantage.AlphaVantageException;
-//import com.crazzyghost.alphavantage.timeseries.response.QuoteResponse;
-//import com.crazzyghost.alphavantage.timeseries.response.TimeSeriesResponse;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class QuoteController {
-
-
 
     @GetMapping("/")
     public String index() {
@@ -27,7 +19,22 @@ public class QuoteController {
     }
 
     @GetMapping("/quote/{ticker}")
-    public void SingleQuote(@PathVariable String ticker) {
+    public Quote SingleQuote(@PathVariable String ticker) {
+
+        AtomicReference<Quote> q = new AtomicReference<>(new Quote());
+
+        AlphaVantage.api().timeSeries().quote()
+                .forSymbol(ticker)
+                .onSuccess(e -> q.set(MapQuoteResponse((QuoteResponse) e)))
+                .onFailure(TickerFetch3Application::handleFailure)
+                .fetch();
+
+        return q.get();
+    }
+
+
+    @GetMapping("/console/print/quote/{ticker}")
+    public void ConsolePrintQuote(@PathVariable String ticker) {
         System.out.println("Fetched Quote for " + ticker);
 
         AlphaVantage.api().timeSeries().quote()
@@ -37,20 +44,20 @@ public class QuoteController {
                 .fetch();
     }
 
-//    @GetMapping("/example")
-//    public void getExampleQuote(){
-//        AlphaVantage.api().timeSeries().quote()
-//                .forSymbol("SPY")
-//                .onSuccess(e -> Success((QuoteResponse) e))
-//                .onFailure(TickerFetch3Application::handleFailure)
-//                .fetch();
-//    }
+    @GetMapping("/example")
+    public void getExampleQuote(){
+        AlphaVantage.api().timeSeries().quote()
+                .forSymbol("SPY")
+                .onSuccess(e -> handleSuccess((QuoteResponse) e))
+                .onFailure(TickerFetch3Application::handleFailure)
+                .fetch();
+    }
 
-    public static void handleSuccess(QuoteResponse response) {
+    public static Quote handleSuccess(QuoteResponse response) {
         //plotGraph(response.getStockUnits());
 
         System.out.println(response.toString());
-        SingleQuote q = new SingleQuote(response.getSymbol(), response.getOpen(),
+        Quote q = new Quote(response.getSymbol(), response.getOpen(),
                 response.getHigh(), response.getLow(), response.getPrice(),
                 response.getVolume(), response.getLatestTradingDay(),
                 response.getPreviousClose(), response.getChange(),
@@ -58,9 +65,30 @@ public class QuoteController {
 
         //plotGraph(response.getStockUnits());
         System.out.println(q.toString());
+            return q;
+    }
+
+    public static Quote MapQuoteResponse(QuoteResponse response) {
+
+        Quote q = new Quote(response.getSymbol(), response.getOpen(),
+                response.getHigh(), response.getLow(), response.getPrice(),
+                response.getVolume(), response.getLatestTradingDay(),
+                response.getPreviousClose(), response.getChange(),
+                response.getChangePercent());
+        return q;
     }
 
     public static void handleFailure(AlphaVantageException error) {
         System.out.println("Error message is: " + error.getMessage());
+    }
+
+
+    public String convertResponseToString(QuoteResponse response) {
+        Quote q = new Quote(response.getSymbol(), response.getOpen(),
+                response.getHigh(), response.getLow(), response.getPrice(),
+                response.getVolume(), response.getLatestTradingDay(),
+                response.getPreviousClose(), response.getChange(),
+                response.getChangePercent());
+        return q.toString();
     }
 }
