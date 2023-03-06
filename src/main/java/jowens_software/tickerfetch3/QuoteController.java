@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 public class QuoteController {
-
+    private static Quote singleQuote;
     @GetMapping("/")
     public String index() {
         return "Select ticker with URL until FE is linked.";
@@ -21,15 +21,17 @@ public class QuoteController {
     @GetMapping("/quote/{ticker}")
     public Quote SingleQuote(@PathVariable String ticker) {
 
-        AtomicReference<Quote> q = new AtomicReference<>(new Quote());
-
+        //AtomicReference<Quote> q = new AtomicReference<>(new Quote());
+        Quote q = new Quote();
         AlphaVantage.api().timeSeries().quote()
                 .forSymbol(ticker)
-                .onSuccess(e -> q.set(MapQuoteResponse((QuoteResponse) e)))
+                //.onSuccess(e -> q.set(MapQuoteResponse((QuoteResponse) e)))
+                .onSuccess(e -> handleSuccess((QuoteResponse) e))
                 .onFailure(TickerFetch3Application::handleFailure)
                 .fetch();
 
-        return q.get();
+        q = singleQuote;
+        return q;
     }
 
 
@@ -53,7 +55,7 @@ public class QuoteController {
                 .fetch();
     }
 
-    public static Quote handleSuccess(QuoteResponse response) {
+    public static void handleSuccess(QuoteResponse response) {
         //plotGraph(response.getStockUnits());
 
         System.out.println(response.toString());
@@ -65,7 +67,9 @@ public class QuoteController {
 
         //plotGraph(response.getStockUnits());
         System.out.println(q.toString());
-            return q;
+
+        singleQuote = q;
+            //return q;
     }
 
     public static Quote MapQuoteResponse(QuoteResponse response) {
@@ -89,6 +93,7 @@ public class QuoteController {
                 response.getVolume(), response.getLatestTradingDay(),
                 response.getPreviousClose(), response.getChange(),
                 response.getChangePercent());
+
         return q.toString();
     }
 }
