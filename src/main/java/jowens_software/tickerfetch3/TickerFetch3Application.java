@@ -15,10 +15,7 @@ public class TickerFetch3Application {
 
     public static void main(String[] args) {
         SpringApplication.run(TickerFetch3Application.class, args);
-    }
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void initializeSession() {
         System.out.println("Session Started.\n\n\n");
         //Might want to have this initialized here
         Config cfg = Config.builder()
@@ -27,19 +24,31 @@ public class TickerFetch3Application {
                 .build();
 
         AlphaVantage.api().init(cfg);
-
-        /* "Global Quote" Call by Ticker (Single Quote Return)
-        --- Do not call TimeSeriesResponse as does not derive from
-        the TimeSeries class, call QuoteResponse instead */
-
-
-        //"intraday" generic call by ticker
-//        AlphaVantage.api().timeSeries().intraday()
-//                .forSymbol("SPY")
-//                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
-//                .onFailure(TickerFetch3Application::handleFailure)
-//                .fetch();
     }
+
+//    @EventListener(ApplicationReadyEvent.class)
+//    public void initializeSession() {
+//        System.out.println("Session Started.\n\n\n");
+//        //Might want to have this initialized here
+//        Config cfg = Config.builder()
+//                .key("EP9UY0QAK3UB8DLX")
+//                .timeOut(10)
+//                .build();
+//
+//        AlphaVantage.api().init(cfg);
+//
+//        /* "Global Quote" Call by Ticker (Single Quote Return)
+//        --- Do not call TimeSeriesResponse as does not derive from
+//        the TimeSeries class, call QuoteResponse instead */
+//
+//
+//        //"intraday" generic call by ticker
+////        AlphaVantage.api().timeSeries().intraday()
+////                .forSymbol("SPY")
+////                .onSuccess(e -> handleSuccess((TimeSeriesResponse) e))
+////                .onFailure(TickerFetch3Application::handleFailure)
+////                .fetch();
+//    }
 
     //public static void handleSuccess(QuoteResponse response) {
 
