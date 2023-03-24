@@ -19,21 +19,22 @@ public class QuoteController {
     }
 
     @GetMapping("/quote/{ticker}")
-    public Quote SingleQuote(@PathVariable String ticker) {
+    public Quote SingleQuote(@PathVariable String ticker) throws InterruptedException {
         Quote q = new Quote();
         AlphaVantage.api().timeSeries().quote()
                 .forSymbol(ticker)
                 .onSuccess(e -> handleSuccess((QuoteResponse) e))
-                .onFailure(TickerFetch3Application::handleFailure)
+                .onFailure(e -> handleFailure(e))
                 .fetch();
 
-//        //https://stackoverflow.com/questions/10850563/how-to-implement-wait-in-a-method-for-another-method-to-be-get-over-in-java
+        //wait for handleSuccess to finish
+        Thread.sleep(1000);
 
         q = singleQuote;
         return q;
     }
 
-    public static void handleSuccess(QuoteResponse response) {
+    public static synchronized void handleSuccess(QuoteResponse response) {
         Quote q = new Quote(response.getSymbol(), response.getOpen(),
                 response.getHigh(), response.getLow(), response.getPrice(),
                 response.getVolume(), response.getLatestTradingDay(),
